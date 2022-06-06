@@ -1,0 +1,208 @@
+# CDSI Workshop "Introduction to Ubuntu"
+# Dr. Tim Elrick, GIC, McGill
+# CC-BY-SA 4.0
+
+# List of demonstrated commands
+# Generally, commands are entered: 
+command -parameters argument
+
+# You can use the tabulator key to auto-complete commands, file names and paths
+# You can use the arrow keys left/right to correct command lines
+# You can use the up arrow key to navigate your command history
+
+
+# Directories ------------------------------------------------------------------
+
+# to display the full path of the present work directory
+pwd
+
+# list directory
+ls
+# options are entered with a preceding dash - 
+ls -lah # l = list, a = show hidden files, h = human readable file sizes
+# cd change directory
+# / = root of your file system
+cd /
+cd var # cd <foldername>, here into the folder named var
+# to go one level up, use ..
+cd ..
+# to go back to your user home folder, use cd ~ or just
+cd
+
+# create a new folder/directory
+mkdir mydir
+# remove a folder with
+rmdir mydir
+# if the folder still contains files that you also want to delete use
+rm -rf mydir
+
+
+# Files -----------------------------------------------------------------------
+
+# to create an empty file or update the date of a file, use
+touch file.txt
+
+# enter text into a file use either
+echo This is a text > file.txt
+# or the text editor
+nano file.txt
+
+# feed an output of a command into a file use >
+ls > out.txt
+
+# show the full content of a text file all at once
+cat file.txt
+# show the full content of a text file page-wise
+less file.txt
+
+# copy a file with
+cp file.txt newfile.txt
+
+# rename a file or move it to a different path with
+mv file.txt newfile.txt
+
+# change permissions of a file with chmod
+# the first parameter is either u g or o, u for user, g for group, o for other/public
+# the second parameter is either + for add or - for remove
+# the third parameter is either r for read permission, w for write and x for execute permission of the file
+chmod u+r file.txt
+chmod g-w file.txt
+chmod o+x file.txt
+# you can also change permissions for all three user categories at once using the sum of the following numbers
+# 0 no permission, 1 execute, 2 write, 4 read. So, to give the user full permission, the group and other only
+# read and execute you would use
+chmod 755 file.txt
+
+# to find a file with its name use
+find . -name file.txt
+
+# to remove a file use
+rm file.txt
+
+
+# Superuser (administrator mode) ------------------------------------------------------------------
+
+# sometime you need administrator permissions to do something. Then you need the command 'sudo' (superuser do)
+# followed by the actual command that you want to execute, e.g.
+sudo cd /sys 
+
+# you have to work on several commands that require the superuser, you can switch the user to sudo with
+sudo su
+# when you are done, switch back to your usual username with
+exit
+
+
+# Installing and updating software 
+
+# Always download the latest information on files from the internet with
+sudo apt update
+
+# Then, you can install software, e.g. curl (to download files) with
+sudo apt install curl
+
+# to update all software, use
+sudo apt upgrade
+
+
+# Logs ------------------------------------------------------------------------------------------
+
+# logs are important to understand what is going on on your computer. They are all stored in 
+/var/log
+
+
+# File system -----------------------------------------------------------------------------------
+
+# display free/used disk space with
+df -h
+
+# display free/used memory/RAM with
+free -h
+
+
+# Compression -----------------------------------------------------------------------------------
+
+# To demonstrate how to compress files we first need to download a large file
+# We download a file from the Open Data Montreal website with curl
+# parameter -o defines the output file name, -L is a redirection to the actual file (otherwise it would 
+# download the HTML information about the file)
+curl -o file.csv -L https://data.montreal.ca/dataset/2fc8a2b9-1556-410e-a118-c46e97e9f19e/resource/71e86320-e35c-4b4c-878a-e52124294355/download/donneesouvertes-interventions-sim.csv
+
+# compress a file with gzip. It will replace the uncompressed file. 
+gzip file.txt
+
+# uncompress with 
+gunzip file.txt.gz
+
+# to create a backup for several files or a folder use 
+tar -cf file.tar mydir
+# to also compress the files/folder use
+tar -czf file.tar.gz file1.txt file2.txt
+# to extract a tar file use
+tar -xf file.tar.gz
+
+
+# History of commands -----------------------------------------------------------------------------
+history
+# to reuse a command type ! followed by the row number
+!12
+
+
+# User management ---------------------------------------------------------------------------------
+
+# check who is logged in on your computer at the moment
+w
+
+# list all users for your computer. Note /etc/passwd lists all users
+# including users that are only used for system purposes. The egrep command
+# uses regular expresssions (regex) to filter the list to actual users
+# that have an id from 1000 onwards
+cat /etc/passwd | egrep :[0-9]{4}: 
+# list all groups for your computer
+cat /etc/group
+
+# create a new user with adduser (where <uname> is the new username you want to create) 
+sudo adduser <uname>
+# create a new group with addgroup (where <gname> is the new group name)
+sudo addgroup <gname>
+# make a user superuser with 
+sudo usermod -aG sudo <uname>
+# add a user to a group
+sudo usermod -aG <gname> <uname>
+# remove a user from a group
+sudo gpasswd -d <uname> <gname>
+# remove a user
+sudo deluser <uname>
+# remove a group
+sudo delgroup <gname>
+
+# change user name
+su <uname>
+# display your username at the moment
+whoami
+
+
+# Remote log-in into a server or computer -----------------------------------------------------
+
+# with SSH (where uname is your username on the remote computer and server is either
+# the IP address or the domain name, e.g. test.mcgill.ca, of the remote computer)
+ssh <uname>@<servername>
+# if SSH doesn't use the default port 22 you can also add the number of the port with -p
+ssh <uname>@<server> -p <port>
+
+
+# Machine maintenance -------------------------------------------------------------------------
+
+# list the name of your computer (hostname)
+hostname
+# find your internet connection details use
+ip link #LOWER_UP is the actual physical network
+# and your ip address with
+ip addr
+# test if your internet works with
+ping 8.8.8.8
+# or 
+traceroute www.mcgill.ca
+
+# There are tons of resources on the internet
+# To recap you can use e.g. https://ubuntu.com/tutorials/command-line-for-beginners
+# To search for answers use, e.g. https://askubuntu.com or https://stackoverflow.com
